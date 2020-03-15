@@ -19,28 +19,23 @@ class ConfigData:
     def refresh_config_data(self):
         config = ConfigParser(allow_no_value=True)
         config.read(INI_PATH)
-
         raw_data = {}
 
         def read_repos():
-            repo_duplicates = {}
+            repo_dupes = {}
             socless_repos = {}
             for org_name in config[INI_ORGS]:
                 org_url = config[INI_ORGS][org_name]
                 for repo_name in config[org_name]:
                     socless_repos[repo_name] = f"https://{org_url}/{repo_name}.git"
 
-                    # raw_data[section] = []
-                    # raw_data[section].append(repo_name)
                     try:
-                        repo_duplicates[repo_name] = repo_duplicates[repo_name].append(
-                            org_name
-                        )
+                        repo_dupes[repo_name] = repo_dupes[repo_name].append(org_name)
                     except KeyError as _:
-                        repo_duplicates[repo_name] = [org_name]
+                        repo_dupes[repo_name] = [org_name]
 
             def check_duplicates():
-                for repo, orgs in repo_duplicates.items():
+                for repo, orgs in repo_dupes.items():
                     if len(orgs) > 1:
                         ConfigError(f"{repo} is listed under multiple orgs - {orgs}\n")
 
@@ -60,6 +55,3 @@ class ConfigData:
     def set_repos(self, new_repos):
         pass
 
-    # def set_config_path(self, new_path):
-    #     self.config_path = new_path
-    #     self.refresh_config_data(self, new_path)
