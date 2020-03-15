@@ -1,0 +1,4 @@
+python-fire
+prompt_toolkit
+docstring_parser
+PyGithub
