@@ -11,3 +11,23 @@ else
     cp default_socless.ini ~
     mv ~/default_socless.ini ~/socless.ini
 fi
+
+echo "Checking for ~/socli_cache"
+
+mkdir -p ~/socli_cache
+
+echo "Checking for git installation to deploy SOCless via Serverless Framework"
+if "git" "--version" ; then
+    echo "git installed"
+else
+    echo "git is not installed, please install git before continuing"
+fi
+
+echo "Checking for npm installation to deploy SOCless via Serverless Framework"
+if "npm" "--version" ; then
+    echo "npm installed"
+else
+    echo "npm is not installed, please install npm before continuing"
+fi
+
+# check awscli installed

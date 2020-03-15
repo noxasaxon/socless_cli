@@ -6,6 +6,8 @@ import os
 
 home = str(Path.home())
 
+# socli_cache
+CACHE_PATH = os.path.join(home, "socli_cache")
 
 # socless.ini file
 INI_PATH = os.path.join(home, "socless.ini")
