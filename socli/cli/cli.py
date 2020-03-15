@@ -19,18 +19,19 @@ from socli.cli.shell_commands.git import clone
 SOCLESS_CORE = "socless_python"
 
 g = Github(os.environ["GH_KEY"])
-socless_data = socless_setup.init()
+# socless_data = socless_setup.init()
+config = socless_setup.ConfigData()
 
 
 def build_clone_url(repo_name):
-    socless_url = socless_data["repos"][repo_name]
+    socless_url = config.repos_data[repo_name]
     clone(socless_url)
 
 
 def start():
-    pprint(socless_data)
-    print("\n")
-    build_clone_url("socless-slack")
+    pprint(config.repos_data)
+    # print("\n")
+    # build_clone_url("socless-slack")
 
 
 # print(dir(fire))
