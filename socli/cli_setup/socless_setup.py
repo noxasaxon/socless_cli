@@ -2,49 +2,53 @@ from configparser import ConfigParser
 import os
 
 print(os.getcwd())
-from socli.constants import INI_ORGS
+from socli.constants import INI_PATH, INI_ORGS
+
+
+def ConfigError(msg):
+    print(f"\nERROR in {INI_PATH}: {msg}\n")
+    exit(1)
 
 
 class ConfigData:
-    def __init__(self, config_path="../cli_setup/socless.ini"):
+    def __init__(self):
         self.repos_data = {}
         self.raw_config = {}
-        self.config_path = config_path
         self.refresh_config_data()
 
     def refresh_config_data(self):
         config = ConfigParser(allow_no_value=True)
-        # config.read(self.config_path)
-        this_path = os.path.join(
-            os.path.abspath(os.path.dirname(__file__)),
-            # "socli",
-            # "cli_setup",
-            "socless.ini",
-        )
-        print(this_path)
-        config.read(this_path)
-        socless_repos = {}
+        config.read(INI_PATH)
+
         raw_data = {}
-        repo_names = []
 
-        # def read_repos():
-        #     for org_name in config[INI_ORGS]:
-        #         org_url = config[INI_ORGS][org_name]
-        #         for repo_name in config[org_name]:
-        #             socless_repos[repo_name] = f"https://{org_url}/{repo_name}.git"
+        def read_repos():
+            repo_duplicates = {}
+            socless_repos = {}
+            for org_name in config[INI_ORGS]:
+                org_url = config[INI_ORGS][org_name]
+                for repo_name in config[org_name]:
+                    socless_repos[repo_name] = f"https://{org_url}/{repo_name}.git"
 
-        #             # raw_data[section] = []
-        #             # raw_data[section].append(repo_name)
-        #             repo_names.append(repo_name)
+                    # raw_data[section] = []
+                    # raw_data[section].append(repo_name)
+                    try:
+                        repo_duplicates[repo_name] = repo_duplicates[repo_name].append(
+                            org_name
+                        )
+                    except KeyError as _:
+                        repo_duplicates[repo_name] = [org_name]
 
-        # self.repos_data = read_repos()
-        # self.raw_config = raw_data
-        print(config.sections())
-        print(f"\nrepo_names: {repo_names}")
+            def check_duplicates():
+                for repo, orgs in repo_duplicates.items():
+                    if len(orgs) > 1:
+                        ConfigError(f"{repo} is listed under multiple orgs - {orgs}\n")
 
-    def set_config_path(self, new_path):
-        self.config_path = new_path
-        self.refresh_config_data(self, new_path)
+            check_duplicates()
+            return socless_repos
+
+        self.repos_data = read_repos()
+        self.raw_config = raw_data
 
     def get_repos(self, path="../cli_setup/socless.ini"):
         self.refresh_config_data(path)
@@ -56,3 +60,6 @@ class ConfigData:
     def set_repos(self, new_repos):
         pass
 
+    # def set_config_path(self, new_path):
+    #     self.config_path = new_path
+    #     self.refresh_config_data(self, new_path)
