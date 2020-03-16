@@ -17,7 +17,14 @@ class ConfigData:
     def refresh_config_data(self):
         config = ConfigParser(allow_no_value=True)
         config.read(INI_PATH)
-        raw_data = {}
+
+        def convert_config_to_dict(config):
+            raw_data = {}
+            for section in config.sections():
+                raw_data[section] = {}
+                for item in config[section]:
+                    raw_data[section] = item
+            return raw_data
 
         def read_repos():
             repo_dupes = {}
@@ -26,7 +33,6 @@ class ConfigData:
                 org_url = config[INI_ORGS][org_name]
                 for repo_name in config[org_name]:
                     socless_repos[repo_name] = f"https://{org_url}/{repo_name}.git"
-
                     try:
                         repo_dupes[repo_name] = repo_dupes[repo_name].append(org_name)
                     except KeyError as _:
@@ -41,7 +47,7 @@ class ConfigData:
             return socless_repos
 
         self.repos_data = read_repos()
-        self.raw_config = raw_data
+        self.raw_config = convert_config_to_dict(config)
 
     def get_repos(self, path="../cli_setup/socless.ini"):
         self.refresh_config_data(path)

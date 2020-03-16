@@ -23,7 +23,8 @@ config = socless_setup.ConfigData()
 def start():
     pprint(config.repos_data)
     repo_name = "socless-slack"
-    prompt_checkbox()
+
+    # prompt_checkbox()
 
     # clone(config.repos_data, repo_name)
     # install(repo_name)
