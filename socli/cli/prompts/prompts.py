@@ -161,8 +161,8 @@ def tutorial_prompt_interactive(choices):
 
 
 def prompt_checkbox(choices="", style="", message="", name="", validator=""):
-    if not choices:
-        choices = [
+    choices = (
+        [
             Separator("= The Meats ="),
             {"name": "Ham"},
             {"name": "Ground Meat"},
@@ -180,8 +180,12 @@ def prompt_checkbox(choices="", style="", message="", name="", validator=""):
             {"name": "Olives", "disabled": "out of stock"},
             {"name": "Extra cheese"},
         ]
-    if not style:
-        style = style_from_dict(
+        if not choices
+        else choices
+    )
+
+    style = (
+        style_from_dict(
             {
                 Token.Separator: "#cc5454",
                 Token.QuestionMark: "#673ab7 bold",
@@ -192,15 +196,17 @@ def prompt_checkbox(choices="", style="", message="", name="", validator=""):
                 Token.Question: "",
             }
         )
+        if not style
+        else style
+    )
 
-    if not message:
-        message = "message"
-    if not name:
-        name = "repos_to_deploy"
-    if not validator:
-        validator = (
-            lambda answer: "You must choose at least one." if len(answer) == 0 else True
-        )
+    message = "message" if not message else message
+    name = "repos_to_deploy" if not name else name
+    validator = (
+        (lambda answer: "You must choose at least one." if len(answer) == 0 else True)
+        if not validator
+        else validator
+    )
 
     questions = [
         {
