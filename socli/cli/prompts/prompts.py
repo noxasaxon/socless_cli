@@ -160,10 +160,21 @@ def tutorial_prompt_interactive(choices):
     pprint(answers)
 
 
-def format_repos_to_choices(repos_data):
-    # print(repos_data)
+def select_repos(repos_data, action):
+    def format_repos_to_choices():
+        choices = []
 
-    pass
+        for repo in repos_data.values():
+            print(repo)
+            choices.append({"name": repo["repo_name"]})
+
+        print(choices)
+        return choices
+
+    choices = format_repos_to_choices()
+    message = f"Select repos to {action}"
+
+    prompt_checkbox(choices=choices, message=message)
 
 
 def prompt_checkbox(choices="", style="", message="", name="", validator=""):
@@ -172,19 +183,12 @@ def prompt_checkbox(choices="", style="", message="", name="", validator=""):
             Separator("= The Meats ="),
             {"name": "Ham"},
             {"name": "Ground Meat"},
-            {"name": "Bacon"},
             Separator("= The Cheeses ="),
             {"name": "Mozzarella", "checked": True},
-            {"name": "Cheddar"},
-            {"name": "Parmesan"},
             Separator("= The usual ="),
             {"name": "Mushroom"},
-            {"name": "Tomato"},
-            {"name": "Pepperoni"},
             Separator("= The extras ="),
-            {"name": "Pineapple"},
             {"name": "Olives", "disabled": "out of stock"},
-            {"name": "Extra cheese"},
         ]
         if not choices
         else choices

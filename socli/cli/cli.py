@@ -13,7 +13,7 @@ from github import Github
 from socli.cli.shell_commands.git import clone
 from socli.cli.shell_commands.node import install, deploy
 
-from socli.cli.prompts.prompts import prompt_checkbox, format_repos_to_choices
+from socli.cli.prompts.prompts import prompt_checkbox, select_repos
 
 g = Github(os.environ["GH_KEY"])
 
@@ -24,12 +24,12 @@ def start():
     pprint(socli.repos_data)
     repo_name = "socless-slack"
 
-    format_repos_to_choices(socli.repos_data)
+    select_repos(socli.repos_data, "clone")
     # format_repos_to_choices(config.raw_config)
 
     # prompt_checkbox()
     repo = socli.repos_data[repo_name]
-    clone(repo)
-    install(repo)
-    deploy(repo, "sandbox")
+    # clone(repo)
+    # install(repo)
+    # deploy(repo, "sandbox")
 
