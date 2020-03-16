@@ -12,8 +12,8 @@ def check_cache_and_update(repo):
             [
                 "git",
                 "status",
-                f"git-dir={repo['cache_path']}",
-                f"work-tree={repo['cache_path']}",
+                f"git-dir={repo.cache_path}",
+                f"work-tree={repo.cache_path}",
             ]
         )
 
@@ -30,8 +30,8 @@ def check_cache_and_update(repo):
                 "pull",
                 "origin",
                 repo.branch,
-                f"git-dir={repo['cache_path']}",
-                f"work-tree={repo['cache_path']}",
+                f"git-dir={repo.cache_path}",
+                f"work-tree={repo.cache_path}",
             ]
         )
 

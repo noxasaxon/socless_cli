@@ -1,7 +1,7 @@
 # from prompt_toolkit.completion import Completer, Completion, FuzzyCompleter
 # from prompt_toolkit import PromptSession
 import fire
-
+import sys
 import regex
 
 from pprint import pprint
@@ -13,6 +13,13 @@ from PyInquirer import (
     Validator,
     ValidationError,
 )
+
+
+class PromptError:
+    def __init__(self, msg):
+        self.msg = msg
+        print(f"\nERROR during prompt: {msg}\n")
+        exit(1)
 
 
 # class PhoneNumberValidator(Validator):
@@ -163,18 +170,14 @@ def tutorial_prompt_interactive(choices):
 def select_repos(repos_data, action):
     def format_repos_to_choices():
         choices = []
-
         for repo in repos_data.values():
-            print(repo)
             choices.append({"name": repo.name})
-
-        print(choices)
         return choices
 
     choices = format_repos_to_choices()
     message = f"Select repos to {action}"
 
-    prompt_checkbox(choices=choices, message=message)
+    return prompt_checkbox(choices=choices, message=message)
 
 
 def prompt_checkbox(choices="", style="", message="", name="", validator=""):
@@ -211,7 +214,7 @@ def prompt_checkbox(choices="", style="", message="", name="", validator=""):
     )
 
     message = "message" if not message else message
-    name = "repos_to_deploy" if not name else name
+    name = "repos" if not name else name
     validator = (
         (lambda answer: "You must choose at least one." if len(answer) == 0 else True)
         if not validator
@@ -229,5 +232,19 @@ def prompt_checkbox(choices="", style="", message="", name="", validator=""):
     ]
 
     answers = prompt(questions, style=style)
-    print(answers)
+    return answers
 
+
+def yes_or_no(question, default="yes"):
+    """Ask a yes/no question and return bool."""
+    print(question)
+    choice = input().lower()
+    if not choice:
+        choice = default
+    if "n" in choice:
+        return False
+    elif "y" in choice:
+        return True
+    else:
+        errormsg = "Please enter a valid answer."
+        PromptError(errormsg)

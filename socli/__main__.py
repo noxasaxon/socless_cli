@@ -1,5 +1,6 @@
 import sys
 from socli.cli import cli
+from fire import Fire
 
 
 def main():
@@ -9,7 +10,8 @@ def main():
     for arg in args:
         print("passed argument :: {}".format(arg))
 
-    cli.start()
+    # cli.start()
+    Fire(cli.Cli())
 
 
 if __name__ == "__main__":
