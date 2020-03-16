@@ -11,7 +11,7 @@ def sanitize(cmd_str):
 
 
 def build_repo_path(repo_name):
-    return f"{CACHE_PATH}/{repo_name}"
+    return sanitize(f"{CACHE_PATH}/{repo_name}")
 
 
 def run_cmd(cmd_args):

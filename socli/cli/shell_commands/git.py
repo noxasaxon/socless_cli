@@ -40,11 +40,11 @@ def check_cache_and_update(repo_name, branch_name="master"):
 
 
 def clone(repos_data, repo_name, branch_name="master"):
-    socless_url = sanitize(repos_data[repo_name])
+    github_url = sanitize(repos_data[repo_name])
 
     if path.exists(build_repo_path(repo_name)):
         check_cache_and_update(repo_name, branch_name)
     else:
-        print(f"Cloning: {socless_url}")
-        process = run_cmd(["git", "clone", socless_url, build_repo_path(repo_name)])
+        print(f"Cloning: {github_url}")
+        process = run_cmd(["git", "clone", github_url, build_repo_path(repo_name)])
 

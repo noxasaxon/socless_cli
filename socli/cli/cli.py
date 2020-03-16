@@ -15,6 +15,7 @@ from prompt_toolkit.completion import Completer, Completion, FuzzyCompleter
 from prompt_toolkit import PromptSession
 
 from socli.cli.shell_commands.git import clone
+from socli.cli.shell_commands.node import install, deploy
 
 g = Github(os.environ["GH_KEY"])
 
@@ -24,10 +25,8 @@ config = socless_setup.ConfigData()
 def start():
     pprint(config.repos_data)
     # show options
-    clone(config.repos_data, "socless-slack")
-
-
-# print(dir(fire))
-# for repo in g.get_user().get_repos():
-#     print(repo.name)
+    repo_name = "socless-slack"
+    clone(config.repos_data, repo_name)
+    install(repo_name)
+    deploy(repo_name, "sandbox")
 

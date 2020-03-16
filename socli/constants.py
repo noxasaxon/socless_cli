@@ -8,11 +8,13 @@ home = str(Path.home())
 
 ILLEGAL_CHARS = "\\}{\|&\]\[ "
 
-# socli_cache
-CACHE_PATH = os.path.join(home, "socli_cache")
+# cache directory for cloned repos
+CACHE_NAME = "socli_cache"
+CACHE_PATH = os.path.join(home, CACHE_NAME)
 
-# socless.ini file
-INI_PATH = os.path.join(home, "socless.ini")
+# socless.ini file for configuration of socli
+INI_NAME = "socless.ini"
+INI_PATH = os.path.join(home, INI_NAME)
 INI_ORGS = "organizations"
 INI_PLAYBOOKS = "playbooks"
 

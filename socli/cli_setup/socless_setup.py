@@ -1,7 +1,5 @@
 from configparser import ConfigParser
 import os
-
-print(os.getcwd())
 from socli.constants import INI_PATH, INI_ORGS
 
 
