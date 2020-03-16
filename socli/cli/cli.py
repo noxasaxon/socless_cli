@@ -7,15 +7,13 @@ For usage instructions execute the following lines:
 
 import os
 from pprint import pprint
-import fire
 from socli.cli_setup import socless_setup
 from github import Github
 
-from prompt_toolkit.completion import Completer, Completion, FuzzyCompleter
-from prompt_toolkit import PromptSession
-
 from socli.cli.shell_commands.git import clone
 from socli.cli.shell_commands.node import install, deploy
+
+from socli.cli.prompts.prompts import prompt_checkbox, tutorial_prompt_checkbox
 
 g = Github(os.environ["GH_KEY"])
 
@@ -24,9 +22,10 @@ config = socless_setup.ConfigData()
 
 def start():
     pprint(config.repos_data)
-    # show options
     repo_name = "socless-slack"
-    clone(config.repos_data, repo_name)
-    install(repo_name)
-    deploy(repo_name, "sandbox")
+    prompt_checkbox()
+
+    # clone(config.repos_data, repo_name)
+    # install(repo_name)
+    # deploy(repo_name, "sandbox")
 
