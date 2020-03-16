@@ -10,18 +10,18 @@ def NodeError(repo_name, cmd):
     exit(1)
 
 
-def install(repo_name):
-    process = run_cmd(["npm", "install", "--prefix", build_repo_path(repo_name)])
+def install(repo):
+    process = run_cmd(["npm", "install", "--prefix", repo["cache_path"]])
     return process
 
 
-def list_deployment_realms(repo_name):
+def list_deployment_realms(repo):
     pass
 
 
-def deploy(repo_name, deployment_environment):
+def deploy(repo, deployment_environment):
     process = run_cmd(
-        ["npm", "run", deployment_environment, "--prefix", build_repo_path(repo_name)]
+        ["npm", "run", deployment_environment, "--prefix", repo["cache_path"]]
     )
 
     print("STDOUT:")
@@ -29,6 +29,6 @@ def deploy(repo_name, deployment_environment):
 
     if "Serverless Error" in process.stdout or "Serverless Warning" in process.stdout:
         print(process.stdout)
-        NodeError(repo_name, f"Deploy to {deployment_environment}")
+        NodeError(repo["repo_name"], f"Deploy to {deployment_environment}")
 
     return process

@@ -160,8 +160,9 @@ def tutorial_prompt_interactive(choices):
     pprint(answers)
 
 
-def format_repos(repos_data):
-    print(repos_data)
+def format_repos_to_choices(repos_data):
+    # print(repos_data)
+
     pass
 
 
@@ -224,3 +225,4 @@ def prompt_checkbox(choices="", style="", message="", name="", validator=""):
     ]
 
     answers = prompt(questions, style=style)
+

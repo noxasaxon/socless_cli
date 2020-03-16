@@ -1,6 +1,7 @@
 from configparser import ConfigParser
 import os
 from socli.constants import INI_PATH, INI_ORGS
+from socli.cli.shell_commands.cmd_helpers import build_repo_path
 
 
 def ConfigError(msg):
@@ -21,18 +22,31 @@ class ConfigData:
         def convert_config_to_dict(config):
             raw_data = {}
             for section in config.sections():
-                raw_data[section] = {}
+                raw_data[section] = []
                 for item in config[section]:
-                    raw_data[section] = item
+                    #! FIX: doesn't read k,v pairs correctly
+                    raw_data[section].append(item)
             return raw_data
 
         def read_repos():
+            def build_repo_object(org_name, org_url, repo_name, branch="master"):
+                return {
+                    "repo_name": repo_name,
+                    "org_name": org_name,
+                    "url": f"https://{org_url}/{repo_name}.git",
+                    "cache_path": build_repo_path(repo_name),
+                    "branch": branch,
+                }
+
             repo_dupes = {}
             socless_repos = {}
             for org_name in config[INI_ORGS]:
                 org_url = config[INI_ORGS][org_name]
                 for repo_name in config[org_name]:
-                    socless_repos[repo_name] = f"https://{org_url}/{repo_name}.git"
+                    socless_repos[repo_name] = build_repo_object(
+                        org_name, org_url, repo_name
+                    )
+
                     try:
                         repo_dupes[repo_name] = repo_dupes[repo_name].append(org_name)
                     except KeyError as _:
@@ -53,7 +67,7 @@ class ConfigData:
         self.refresh_config_data(path)
         return self.repos_data
 
-    def list_repos(self):
+    def get_config_data(self):
         return self.config_data
 
     def set_repos(self, new_repos):
