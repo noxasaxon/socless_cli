@@ -8,12 +8,11 @@ For usage instructions execute the following lines:
 import os
 from pprint import pprint
 from socli.cli import socli_core
-from github import Github
-
 from socli.cli.shell_commands import git, node
 from socli.cli.prompts import prompts
 
-g = Github(os.environ["GH_KEY"])
+# from github import Github
+# g = Github(os.environ["GH_KEY"])
 
 # socli = socli_core.ConfigData()
 
@@ -21,10 +20,8 @@ g = Github(os.environ["GH_KEY"])
 # def start():
 # pprint(socli.repos_data)
 # repo_name = "socless-slack"
-
 # prompts.select_repos(socli.repos_data, "clone")
 # format_repos_to_choices(config.raw_config)
-
 # prompt_checkbox()
 # repo = socli.repos_data[repo_name]
 # clone(repo)
