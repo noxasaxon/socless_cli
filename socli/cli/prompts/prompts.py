@@ -166,7 +166,7 @@ def select_repos(repos_data, action):
 
         for repo in repos_data.values():
             print(repo)
-            choices.append({"name": repo["repo_name"]})
+            choices.append({"name": repo.name})
 
         print(choices)
         return choices
@@ -229,4 +229,5 @@ def prompt_checkbox(choices="", style="", message="", name="", validator=""):
     ]
 
     answers = prompt(questions, style=style)
+    print(answers)
 

@@ -7,7 +7,7 @@ For usage instructions execute the following lines:
 
 import os
 from pprint import pprint
-from socli.cli_setup import socless_setup
+from socli.cli import socli_core
 from github import Github
 
 from socli.cli.shell_commands.git import clone
@@ -17,7 +17,7 @@ from socli.cli.prompts.prompts import prompt_checkbox, select_repos
 
 g = Github(os.environ["GH_KEY"])
 
-socli = socless_setup.ConfigData()
+socli = socli_core.ConfigData()
 
 
 def start():
@@ -32,4 +32,12 @@ def start():
     # clone(repo)
     # install(repo)
     # deploy(repo, "sandbox")
+
+
+class Cli:
+    def __init__(self):
+        pass
+
+    def list_repos(self):
+        pass
 

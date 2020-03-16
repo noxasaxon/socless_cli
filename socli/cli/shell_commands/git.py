@@ -29,7 +29,7 @@ def check_cache_and_update(repo):
                 "git",
                 "pull",
                 "origin",
-                repo["branch"],
+                repo.branch,
                 f"git-dir={repo['cache_path']}",
                 f"work-tree={repo['cache_path']}",
             ]
@@ -40,8 +40,8 @@ def check_cache_and_update(repo):
 
 
 def clone(repo):
-    if path.exists(repo["cache_path"]):
+    if path.exists(repo.cache_path):
         check_cache_and_update(repo)
     else:
-        process = run_cmd(["git", "clone", repo["url"], repo["cache_path"]])
+        process = run_cmd(["git", "clone", repo.url, repo.cache_path])
 
