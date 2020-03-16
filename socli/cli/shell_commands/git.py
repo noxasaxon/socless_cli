@@ -1,25 +1,50 @@
-import subprocess
-from socli.cli.shell_commands.cmd_helpers import sanitize
-from socli.constants import CACHE_PATH
+from os import path
+from socli.cli.shell_commands.cmd_helpers import (
+    sanitize,
+    build_repo_path,
+    run_cmd,
+)
 
 
-def build_clone_path(repo_name):
-    return f"{CACHE_PATH}/{repo_name}"
+def check_cache_and_update(repo_name, branch_name="master"):
+    def branch_is_current(repo_name):
+        process = run_cmd(
+            [
+                "git",
+                "status",
+                f"git-dir={build_repo_path(repo_name)}",
+                f"work-tree={build_repo_path(repo_name)}",
+            ]
+        )
+
+        if "is up to date with" in process.stdout:
+            print("No changes to branch detected, using cache")
+            return True
+        else:
+            return False
+
+    def pull_update(repo_name, branch_name="master"):
+        process = run_cmd(
+            [
+                "git",
+                "pull",
+                "origin",
+                branch_name,
+                f"git-dir={build_repo_path(repo_name)}",
+                f"work-tree={build_repo_path(repo_name)}",
+            ]
+        )
+
+    if not branch_is_current(repo_name):
+        pull_update(repo_name, branch_name)
 
 
-def check_cache(repo_name):
-    """Check if repo is already cloned and most recent commit."""
-    pass
-
-
-def clone(repos_data, repo_name):
+def clone(repos_data, repo_name, branch_name="master"):
     socless_url = sanitize(repos_data[repo_name])
 
-    print(f"Cloning: {socless_url}")
-
-    process = subprocess.run(
-        ["git", "clone", socless_url, build_clone_path(repo_name)],
-        stdout=subprocess.PIPE,
-        universal_newlines=True,
-    )
+    if path.exists(build_repo_path(repo_name)):
+        check_cache_and_update(repo_name, branch_name)
+    else:
+        print(f"Cloning: {socless_url}")
+        process = run_cmd(["git", "clone", socless_url, build_repo_path(repo_name)])
 

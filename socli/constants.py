@@ -6,6 +6,8 @@ import os
 
 home = str(Path.home())
 
+ILLEGAL_CHARS = "\\}{\|&\]\[ "
+
 # socli_cache
 CACHE_PATH = os.path.join(home, "socli_cache")
 
