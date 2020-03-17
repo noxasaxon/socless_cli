@@ -1,18 +1,20 @@
-from socli.cli.shell_commands.cmd_helpers import sanitize, build_repo_path, run_cmd
-from socli.constants import INI_PATH, INI_ORGS
+from socli.cli.shell_commands.cmd_helpers import (
+    sanitize,
+    build_repo_path,
+    Command,
+    Success,
+    Fail,
+)
+from socli.constants import INI_PATH, INI_ORGS, SOCLESS_CORE
 
 # npm x --prefix path/to/your/app
 
 
-def NodeError(repo_name, cmd):
-    """Exits program without traceback."""
-    print(f"\nERROR during {cmd} for {repo_name}!\n")
-    exit(1)
-
-
 def install(repo):
-    process = run_cmd(["npm", "install", "--prefix", repo.cache_path])
-    return process
+    cmd = Command(
+        repo.name, "npm install", ["npm", "install", "--prefix", repo.cache_path]
+    )
+    return cmd
 
 
 def list_deployment_realms(repo):
@@ -20,15 +22,22 @@ def list_deployment_realms(repo):
 
 
 def deploy(repo, deployment_environment):
-    process = run_cmd(
-        ["npm", "run", deployment_environment, "--prefix", repo.cache_path]
+    cmd = Command(
+        repo.name,
+        "run",
+        ["npm", "run", deployment_environment, "--prefix", repo.cache_path],
     )
 
-    print("STDOUT:")
-    print(process.stdout)
+    # print("STDOUT:")
+    # print(process.stdout)
 
-    if "Serverless Error" in process.stdout or "Serverless Warning" in process.stdout:
-        print(process.stdout)
-        NodeError(repo.name, f"Deploy to {deployment_environment}")
+    if (
+        "Serverless Error" in cmd.process.stdout
+        or "Serverless Warning" in cmd.process.stdout
+    ):
+        print(cmd.process.stdout)
+        cmd.set_result("fail", f"{deployment_environment}")
+    else:
+        cmd.set_result("success", f"{deployment_environment}")
 
-    return process
+    return cmd

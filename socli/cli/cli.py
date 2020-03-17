@@ -10,6 +10,7 @@ from pprint import pprint
 from socli.cli import socli_core
 from socli.cli.shell_commands import git, node
 from socli.cli.prompts import prompts
+from socli.constants import SOCLESS_CORE
 
 # from github import Github
 # g = Github(os.environ["GH_KEY"])
@@ -55,7 +56,10 @@ class Cli:
             environment = "dev"
 
         for repo_name in names:
-            self._deploy_repo(repo_name, environment)
+            if repo_name == SOCLESS_CORE:
+                print("skipping core, does not deploy..")
+            else:
+                self._deploy_repo(repo_name, environment)
 
     def prompt_repos(self):
         answers = prompts.select_repos(self.repos, "deploy")
@@ -64,9 +68,9 @@ class Cli:
         return repos
 
     # private
-    def _deploy_repo(self, repo_name):
+    def _deploy_repo(self, repo_name, environment):
         repo = self.repos[repo_name]
         git.clone(repo)
         node.install(repo)
-        node.deploy(repo)
+        node.deploy(repo, environment)
 
