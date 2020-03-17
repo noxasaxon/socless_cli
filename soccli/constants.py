@@ -9,10 +9,10 @@ home = str(Path.home())
 ILLEGAL_CHARS = "\\}{\|&\]\[ "
 
 # cache directory for cloned repos
-CACHE_NAME = "socli_cache"
+CACHE_NAME = "soccli_cache"
 CACHE_PATH = os.path.join(home, CACHE_NAME)
 
-# socless.ini file for configuration of socli
+# socless.ini file for configuration of soccli
 INI_NAME = "socless.ini"
 INI_PATH = os.path.join(home, INI_NAME)
 INI_ORGS = "organizations"

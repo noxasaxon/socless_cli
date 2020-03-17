@@ -1,5 +1,5 @@
 from os import path
-from socli.cli.shell_commands.cmd_helpers import (
+from soccli.cli.shell_commands.cmd_helpers import (
     sanitize,
     build_repo_path,
     Command,

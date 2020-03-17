@@ -1,7 +1,7 @@
 from configparser import ConfigParser
 import os
-from socli.constants import INI_PATH, INI_ORGS
-from socli.cli.shell_commands.cmd_helpers import build_repo_path
+from soccli.constants import INI_PATH, INI_ORGS
+from soccli.cli.shell_commands.cmd_helpers import build_repo_path
 
 
 def ConfigError(msg):
@@ -10,7 +10,7 @@ def ConfigError(msg):
 
 
 class Repo:
-    """Socli Git Repository object.
+    """soccli Git Repository object.
     """
 
     def __init__(self, name, org_name, org_url, branch="master"):

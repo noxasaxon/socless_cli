@@ -1,6 +1,6 @@
 import re
 import subprocess
-from socli.constants import CACHE_PATH, ILLEGAL_CHARS
+from soccli.constants import CACHE_PATH, ILLEGAL_CHARS
 
 
 def sanitize(cmd_str):

@@ -1,9 +1,9 @@
 from setuptools import setup
 
 setup(
-    name="socli",
+    name="soccli",
     version="0.1.0",
-    packages=["socli"],
-    entry_points={"console_scripts": ["socli = socli.__main__:main"]},
+    packages=["soccli"],
+    entry_points={"console_scripts": ["soccli = soccli.__main__:main"]},
 )
 
