@@ -1,6 +1,7 @@
 #!/bin/bash
 
-pip3 install -e .
+pip3 install -e . # install socli as a bash command
+pip3 install -r ./socli/requirements.txt # install dependencies for socli
 
 echo "Checking for ~/socless.ini"
 

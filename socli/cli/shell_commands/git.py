@@ -2,49 +2,65 @@ from os import path
 from socli.cli.shell_commands.cmd_helpers import (
     sanitize,
     build_repo_path,
-    run_cmd,
+    Command,
+    Success,
+    Fail,
 )
 
 
-def check_cache_and_update(repo_name, branch_name="master"):
-    def branch_is_current(repo_name):
-        process = run_cmd(
-            [
-                "git",
-                "status",
-                f"git-dir={build_repo_path(repo_name)}",
-                f"work-tree={build_repo_path(repo_name)}",
-            ]
-        )
+def pull(repo):
+    cmd = Command(
+        repo.name,
+        "git pull",
+        [
+            "git",
+            "pull",
+            "origin",
+            repo.branch,
+            f"git-dir={repo.cache_path}",
+            f"work-tree={repo.cache_path}",
+        ],
+    )
+    return cmd
 
-        if "is up to date with" in process.stdout:
+
+def status(repo):
+    cmd = Command(
+        repo.name,
+        "git status",
+        [
+            "git",
+            "status",
+            f"git-dir={repo.cache_path}",
+            f"work-tree={repo.cache_path}",
+        ],
+    )
+    return cmd
+
+
+def check_cache_and_update(repo):
+    cmd = status(repo)
+
+    def status_up_to_date(cmd_object):
+        if "is up to date with" in cmd_object.process.stdout:
             print("No changes to branch detected, using cache")
             return True
         else:
             return False
 
-    def pull_update(repo_name, branch_name="master"):
-        process = run_cmd(
-            [
-                "git",
-                "pull",
-                "origin",
-                branch_name,
-                f"git-dir={build_repo_path(repo_name)}",
-                f"work-tree={build_repo_path(repo_name)}",
-            ]
-        )
-
-    if not branch_is_current(repo_name):
-        pull_update(repo_name, branch_name)
+    if not status_up_to_date(cmd):
+        cmd = pull(repo)
+    return cmd
 
 
-def clone(repos_data, repo_name, branch_name="master"):
-    github_url = sanitize(repos_data[repo_name])
+def clone(repo):
+    print(f"Cloning {repo.name}")
 
-    if path.exists(build_repo_path(repo_name)):
-        check_cache_and_update(repo_name, branch_name)
+    if path.exists(repo.cache_path):
+        return check_cache_and_update(repo)
     else:
-        print(f"Cloning: {github_url}")
-        process = run_cmd(["git", "clone", github_url, build_repo_path(repo_name)])
+        cmd = Command(
+            repo.name, "git clone", ["git", "clone", repo.url, repo.cache_path]
+        )
+        return cmd
 
