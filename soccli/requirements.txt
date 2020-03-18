@@ -1,4 +1,3 @@
-python-fire
+fire
 prompt_toolkit
 PyInquirer
-# PyGithub
