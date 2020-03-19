@@ -1,3 +1,0 @@
-fire
-prompt_toolkit
-PyInquirer

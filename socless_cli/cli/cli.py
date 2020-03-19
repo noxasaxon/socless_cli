@@ -7,24 +7,24 @@ For usage instructions execute the following lines:
 
 import os
 from pprint import pprint
-from soccli.cli import soccli_core
-from soccli.cli.shell_commands import git, node
-from soccli.cli.prompts import prompts
-from soccli.constants import SOCLESS_CORE
+from socless_cli.cli import cli_core
+from socless_cli.cli.shell_commands import git, node
+from socless_cli.cli.prompts import prompts
+from socless_cli.constants import SOCLESS_CORE
 
 # from github import Github
 # g = Github(os.environ["GH_KEY"])
 
-# soccli = soccli_core.ConfigData()
+# socless_cli = cli_core.ConfigData()
 
 
 # def start():
-# pprint(soccli.repos_data)
+# pprint(socless_cli.repos_data)
 # repo_name = "socless-slack"
-# prompts.select_repos(soccli.repos_data, "clone")
+# prompts.select_repos(socless_cli.repos_data, "clone")
 # format_repos_to_choices(config.raw_config)
 # prompt_checkbox()
-# repo = soccli.repos_data[repo_name]
+# repo = socless_cli.repos_data[repo_name]
 # clone(repo)
 # install(repo)
 # deploy(repo, "sandbox")
@@ -32,7 +32,7 @@ from soccli.constants import SOCLESS_CORE
 
 class Cli:
     def __init__(self):
-        self.config = soccli_core.ConfigData()
+        self.config = cli_core.ConfigData()
         self.repos = self.config.repos_data
 
     def list_repos(self):

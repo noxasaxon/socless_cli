@@ -1,5 +1,5 @@
 import sys
-from soccli.cli import cli
+from socless_cli.cli import cli
 from fire import Fire
 
 

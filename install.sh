@@ -1,7 +1,7 @@
 #!/bin/bash
 
-pip3 install -e . # install soccli as a bash command
-pip3 install -r ./soccli/requirements.txt # install dependencies for soccli
+
+pip3 install -e . # install socless_cli as a bash command
 
 echo "Checking for ~/socless.ini"
 
@@ -13,9 +13,9 @@ else
     mv ~/default_socless.ini ~/socless.ini
 fi
 
-echo "Checking for ~/soccli_cache"
+echo "Checking for ~/socless_cli_cache"
 
-mkdir -p ~/soccli_cache
+mkdir -p ~/socless_cli_cache
 
 echo "Checking for git installation to deploy SOCless via Serverless Framework"
 if "git" "--version" ; then

@@ -1,11 +1,11 @@
-from soccli.cli.shell_commands.cmd_helpers import (
+from socless_cli.cli.shell_commands.cmd_helpers import (
     sanitize,
     build_repo_path,
     Command,
     Success,
     Fail,
 )
-from soccli.constants import INI_PATH, INI_ORGS, SOCLESS_CORE
+from socless_cli.constants import INI_PATH, INI_ORGS, SOCLESS_CORE
 
 # npm x --prefix path/to/your/app
 
