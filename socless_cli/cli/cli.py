@@ -15,25 +15,11 @@ from socless_cli.constants import SOCLESS_CORE
 # from github import Github
 # g = Github(os.environ["GH_KEY"])
 
-# socless_cli = cli_core.ConfigData()
-
-
-# def start():
-# pprint(socless_cli.repos_data)
-# repo_name = "socless-slack"
-# prompts.select_repos(socless_cli.repos_data, "clone")
-# format_repos_to_choices(config.raw_config)
-# prompt_checkbox()
-# repo = socless_cli.repos_data[repo_name]
-# clone(repo)
-# install(repo)
-# deploy(repo, "sandbox")
-
 
 class Cli:
     def __init__(self):
         self.config = cli_core.ConfigData()
-        self.repos = self.config.repos_data
+        self.repos: dict = self.config.repos_data
 
     def list_repos(self):
         pprint(self.repos)
@@ -41,16 +27,17 @@ class Cli:
     def update_config(self):
         pass
 
-    def deploy(self, names=None, environment=None):
+    def deploy(self, names: list = [], environment: str = None, yes: bool = False):
         """Deploy a list of repos via repo names."""
         if not names:
-            answer = prompts.yes_or_no(
-                "No repo names supplied, would you like to select repos?"
+            names = (
+                self.prompt_repos(deployable=True)
+                if yes
+                or prompts.yes_or_no(
+                    "No repo names supplied, would you like to select repos?"
+                )
+                else []
             )
-            if answer:
-                names = self.prompt_repos()
-            else:
-                return
 
         if not environment:
             environment = "dev"
@@ -61,7 +48,11 @@ class Cli:
             else:
                 self._deploy_repo(repo_name, environment)
 
-    def prompt_repos(self):
+    def prompt_repos(self, deployable: bool = False):
+        """Create a selection prompt with Repos.
+        Args:
+            deployable: ignore repos that can't deploy (socless_python)
+        """
         answers = prompts.select_repos(self.repos, "deploy")
         repos = answers["repos"]
         print(f"REPOS SELECTED: {repos}")
