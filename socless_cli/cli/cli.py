@@ -28,7 +28,12 @@ class Cli:
         pass
 
     def deploy(self, names: list = [], environment: str = None, yes: bool = False):
-        """Deploy a list of repos via repo names."""
+        """Deploy a list of repos via repo names.
+        Args:
+            names: [String] of repository names (not urls)
+            environment: string matching the npm run <environment>
+            yes: -y flag to show repos for manual selection without asking first
+        """
         if not names:
             names = (
                 self.prompt_repos(deployable=True)
