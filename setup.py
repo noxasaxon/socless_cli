@@ -8,7 +8,6 @@ setup(
     url="https://github.com/noxasaxon/socless_cli",
     version="0.1.0",
     packages=["socless_cli"],
-    install_requires=["fire", "prompt_toolkit==1.0.14", "PyInquirer",],
+    install_requires=["fire", "prompt_toolkit==1.0.14", "PyInquirer", "packaging"],
     entry_points={"console_scripts": ["socless = socless_cli.__main__:main"]},
 )
-

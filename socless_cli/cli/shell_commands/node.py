@@ -33,6 +33,7 @@ def deploy(repo, deployment_environment):
         or "Serverless Warning" in cmd.process.stdout
     ):
         print(cmd.process.stdout)
+        print(cmd.process.stderr)
         cmd.set_result("fail", f"{deployment_environment}")
     else:
         cmd.set_result("success", f"{deployment_environment}")
@@ -40,41 +41,39 @@ def deploy(repo, deployment_environment):
     return cmd
 
 
-def outdated(repo):
+def outdated(repo, quiet=False):
     cmd = Command(
         repo.name, "outdated", ["npm", "outdated", "--prefix", repo.cache_path],
     )
-    print(cmd.process.stdout)
+    if not quiet:
+        print(cmd.process.stdout)
     lines = cmd.process.stdout.split("\n")
 
-    def format_dependencies(lines):
-        """ignore the header line."""
-        dependencies = []
-        for line in lines[1:]:
-            if line:
-                keys = line.split()
-                dependencies.append(
-                    Dependency(
-                        package=keys[0],
-                        current=keys[1],
-                        wanted=keys[2],
-                        latest=keys[3],
-                        parent_repo=keys[4],
-                    )
-                )
-        return dependencies
+    dependencies = {}
+    for line in lines[1:]:
+        if line:
+            keys = line.split()
+            package_name = keys[0]
+            dependencies[package_name] = RepoDependency(
+                package=package_name,
+                current=keys[1],
+                wanted=keys[2],
+                latest=keys[3],
+                parent_repo=keys[4],
+                raw_output=cmd.process.stdout,
+            )
 
-    deps = format_dependencies(lines)
-    return deps
+    return dependencies
 
 
-class Dependency:
-    def __init__(self, package, current, wanted, latest, parent_repo):
+class RepoDependency:
+    def __init__(self, package, current, wanted, latest, parent_repo, raw_output):
         self.current = current
         self.wanted = version.parse(wanted)
         self.latest = version.parse(latest)
         self.package = package
         self.parent_repo = parent_repo
+        self.raw_output = raw_output
         self.is_outdated = self.check_outdated()
 
     def check_outdated(self):
@@ -84,10 +83,3 @@ class Dependency:
 
     def __repr__(self):
         return f"{self.parent_repo}: {self.package}= {self.wanted} -> {self.latest}"
-
-
-class RepoDependencies:
-    def __init__(
-        self, dependencies,
-    ):
-        pass
