@@ -38,12 +38,13 @@ def status(repo):
     return cmd
 
 
-def check_cache_and_update(repo):
+def check_cache_and_update(repo, quiet=False):
     cmd = status(repo)
 
     def status_up_to_date(cmd_object):
         if "is up to date with" in cmd_object.process.stdout:
-            print("No changes to branch detected, using cache")
+            if not quiet:
+                print("No changes to branch detected, using cache")
             return True
         else:
             return False
@@ -53,14 +54,14 @@ def check_cache_and_update(repo):
     return cmd
 
 
-def clone(repo):
-    print(f"Cloning {repo.name}")
+def clone(repo, quiet=False):
+    if not quiet:
+        print(f"Cloning {repo.name}")
 
     if path.exists(repo.cache_path):
-        return check_cache_and_update(repo)
+        return check_cache_and_update(repo, quiet=quiet)
     else:
         cmd = Command(
             repo.name, "git clone", ["git", "clone", repo.url, repo.cache_path]
         )
         return cmd
-

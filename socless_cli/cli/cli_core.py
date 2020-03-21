@@ -2,6 +2,9 @@ from configparser import ConfigParser
 import os
 from socless_cli.constants import INI_PATH, INI_ORGS
 from socless_cli.cli.shell_commands.cmd_helpers import build_repo_path
+from socless_cli.cli.shell_commands import node
+from socless_cli.cli.shell_commands import git
+from pprint import pprint
 
 
 def ConfigError(msg):
@@ -19,6 +22,30 @@ class Repo:
         self.url = f"https://{org_url}/{name}.git"
         self.cache_path = build_repo_path(name)
         self.branch = branch
+        self.dependencies = {}
+
+    def get_dependencies(self, quiet=False):
+        self.clone(quiet=quiet)
+        if not self.dependencies:
+            self.dependencies = node.outdated(self, quiet=quiet)
+        return self.dependencies
+
+    def print_dependencies(self):
+        """Human-Readable dependency data list"""
+        print(f":: {self.name}")
+        dependencies = self.get_dependencies(quiet=True)
+        if dependencies:
+            # only call raw_output from one dependency object (prints full npm outdated)
+            print(next(iter(dependencies.values())).raw_output)
+        else:
+            print("No dependencies\n")
+
+    def clone(self, quiet=False):
+        cmd = git.clone(self, quiet=quiet)
+        return cmd
+
+    def deploy(self, deployment_env, quiet=False):
+        cmd = git.deploy(self, deployment_env, quiet=quiet)
 
     def __repr__(self):
         return f"{self.name}:{self.branch} @ {self.url}"
@@ -72,4 +99,3 @@ class ConfigData:
 
     def set_repos(self, new_repos):
         pass
-
