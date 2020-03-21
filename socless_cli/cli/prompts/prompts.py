@@ -180,6 +180,18 @@ def select_repos(repos_data, action):
     return prompt_checkbox(choices=choices, message=message)
 
 
+def select_environment(action):
+    environments = ["dev", "prod"]
+    choices = []
+    for env in environments:
+        choices.append({"name": env})
+
+    message = f"Select repos to {action}"
+
+    answer = prompt_list(name="environment", choices=choices, message=message)
+    return answer["environment"]
+
+
 def prompt_checkbox(choices="", style="", message="", name="", validator=""):
     choices = (
         [
@@ -229,6 +241,50 @@ def prompt_checkbox(choices="", style="", message="", name="", validator=""):
             "choices": choices,
             "validate": validator,
         }
+    ]
+
+    answers = prompt(questions, style=style)
+    return answers
+
+
+def prompt_list(choices="", style="", message="", name="", default=""):
+    choices = (
+        [
+            Separator("= The Meats ="),
+            {"name": "Ham"},
+            {"name": "Ground Meat"},
+            Separator("= The Cheeses ="),
+            {"name": "Mozzarella", "checked": True},
+            Separator("= The usual ="),
+            {"name": "Mushroom"},
+            Separator("= The extras ="),
+            {"name": "Olives", "disabled": "out of stock"},
+        ]
+        if not choices
+        else choices
+    )
+
+    style = (
+        style_from_dict(
+            {
+                Token.Separator: "#cc5454",
+                Token.QuestionMark: "#673ab7 bold",
+                Token.Selected: "#cc5454",  # default
+                Token.Pointer: "#673ab7 bold",
+                Token.Instruction: "",  # default
+                Token.Answer: "#f44336 bold",
+                Token.Question: "",
+            }
+        )
+        if not style
+        else style
+    )
+
+    message = "message" if not message else message
+    name = "environment" if not name else name
+
+    questions = [
+        {"type": "list", "message": message, "name": name, "choices": choices,}
     ]
 
     answers = prompt(questions, style=style)

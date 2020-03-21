@@ -27,13 +27,14 @@ class Cli:
     def update_config(self):
         pass
 
-    def deploy(self, names: list = [], environment: str = None, yes: bool = False):
+    def deploy(self, *args, environment: str = None, yes: bool = False):
         """Deploy a list of repos via repo names.
         Args:
-            names: [String] of repository names (not urls)
+            args: list of repository names (not urls)
             environment: string matching the npm run <environment>
             yes: -y flag to show repos for manual selection without asking first
         """
+        names = args
         if not names:
             names = (
                 self.prompt_repos(deployable=True)
@@ -45,7 +46,7 @@ class Cli:
             )
 
         if not environment:
-            environment = "dev"
+            environment = prompts.select_environment(action="deploy")
 
         for repo_name in names:
             if repo_name == SOCLESS_CORE:
