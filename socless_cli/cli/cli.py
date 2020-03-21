@@ -63,6 +63,18 @@ class Cli:
         print(f"REPOS SELECTED: {repos}")
         return repos
 
+    def audit(self):
+        """List all pinned versions for npm dependencies in selected repos."""
+        #! Adapt this to be used with github api if GH_KEY is present, otherwise clone repos
+        # for repo in self.repos.values():
+        repo = self.repos["socless-gsuite"]
+        print(repo.name)
+        git.clone(repo)
+        dependencies = node.outdated(repo)
+        print(dependencies)
+
+        pass
+
     # private
     def _deploy_repo(self, repo_name, environment):
         repo = self.repos[repo_name]
