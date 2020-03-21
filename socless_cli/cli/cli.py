@@ -67,10 +67,7 @@ class Cli:
         """List all pinned versions for npm dependencies in selected repos."""
         #! Adapt this to be used with github api if GH_KEY is present, otherwise clone repos
         for repo in self.repos.values():
-            deps = repo.get_dependencies(quiet=True).values()
-            if deps:
-                print(f":: {repo.name}")
-                print(next(iter(deps)).raw_output)
+            deps = repo.print_dependencies()
 
     def audit(self):
         """Check if deployed repos are current with their master branch."""

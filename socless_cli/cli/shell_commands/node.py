@@ -82,4 +82,4 @@ class RepoDependency:
         return False
 
     def __repr__(self):
-        return f"{self.parent_repo}: {self.package}= {self.wanted} -> {self.latest}"
+        return f"<RepoDependencyObject> - {self.package} {self.wanted} -> {self.latest}"

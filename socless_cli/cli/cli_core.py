@@ -4,6 +4,7 @@ from socless_cli.constants import INI_PATH, INI_ORGS
 from socless_cli.cli.shell_commands.cmd_helpers import build_repo_path
 from socless_cli.cli.shell_commands import node
 from socless_cli.cli.shell_commands import git
+from pprint import pprint
 
 
 def ConfigError(msg):
@@ -28,6 +29,16 @@ class Repo:
         if not self.dependencies:
             self.dependencies = node.outdated(self, quiet=quiet)
         return self.dependencies
+
+    def print_dependencies(self):
+        """Human-Readable dependency data list"""
+        print(f":: {self.name}")
+        dependencies = self.get_dependencies(quiet=True)
+        if dependencies:
+            # only call raw_output from one dependency object (prints full npm outdated)
+            print(next(iter(dependencies.values())).raw_output)
+        else:
+            print("No dependencies\n")
 
     def clone(self, quiet=False):
         cmd = git.clone(self, quiet=quiet)
