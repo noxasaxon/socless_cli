@@ -74,6 +74,10 @@ class Cli:
         """Check if deployed repos are current with their master branch."""
         pass
 
+    def test(self, *args, environment: str = None):
+        """Test a deployed lambda or playbook"""
+        pass
+
     # private
     def _deploy_repo(self, repo_name, environment):
         repo = self.repos[repo_name]
