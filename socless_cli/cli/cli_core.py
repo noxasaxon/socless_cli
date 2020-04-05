@@ -1,6 +1,6 @@
 from configparser import ConfigParser
 import os
-from socless_cli.constants import INI_PATH, INI_ORGS
+from socless_cli.constants import INI_FILE_PATH, INI_ORGS
 from socless_cli.cli.shell_commands.cmd_helpers import build_repo_path
 from socless_cli.cli.shell_commands import node
 from socless_cli.cli.shell_commands import git
@@ -8,7 +8,7 @@ from pprint import pprint
 
 
 def ConfigError(msg):
-    print(f"\nERROR in {INI_PATH}: {msg}\n")
+    print(f"\nERROR in {INI_FILE_PATH}: {msg}\n")
     exit(1)
 
 
@@ -59,7 +59,7 @@ class ConfigData:
 
     def refresh_config_data(self):
         config = ConfigParser(allow_no_value=True)
-        config.read(INI_PATH)
+        config.read(INI_FILE_PATH)
 
         def convert_config_to_dict(config):
             raw_data = {}

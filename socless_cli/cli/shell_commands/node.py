@@ -1,6 +1,6 @@
 import json
 from packaging import version
-from socless_cli.constants import INI_PATH, INI_ORGS, SOCLESS_CORE
+from socless_cli.constants import INI_FILE_PATH, INI_ORGS, SOCLESS_CORE
 from socless_cli.cli.shell_commands.cmd_helpers import (
     sanitize,
     build_repo_path,
