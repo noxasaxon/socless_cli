@@ -19,9 +19,9 @@ else
     mv ~/$SOCLESS_CLI_DATA_DIR/default_socless.ini ~/$SOCLESS_CLI_DATA_DIR/socless.ini
 fi
 
-echo "Checking for ~/$SOCLESS_CLI_DATA_DIR/socless_cli_cache"
+echo "Checking for ~/$SOCLESS_CLI_DATA_DIR/cache"
 
-mkdir -p ~/$SOCLESS_CLI_DATA_DIR/socless_cli_cache
+mkdir -p ~/$SOCLESS_CLI_DATA_DIR/cache
 
 echo "Checking for git installation to deploy SOCless via Serverless Framework"
 if "git" "--version" ; then

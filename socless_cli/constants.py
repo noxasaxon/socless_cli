@@ -16,7 +16,7 @@ home = str(Path.home())
 SOCLESS_CLI_DATA_DIR = "socless_cli_data"
 
 # cache directory for cloned repos
-CACHE_DIR = "socless_cli_cache"
+CACHE_DIR = "cache"
 CACHE_PATH = os.path.join(home, SOCLESS_CLI_DATA_DIR, CACHE_DIR)
 
 # socless.ini file for configuration of socless_cli

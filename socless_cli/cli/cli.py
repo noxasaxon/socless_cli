@@ -7,7 +7,7 @@ For usage instructions execute the following lines:
 
 import os
 from pprint import pprint
-from socless_cli.cli import cli_core
+from socless_cli.cli.core import core
 from socless_cli.cli.shell_commands import git, node
 from socless_cli.cli.prompts import prompts
 from socless_cli.constants import SOCLESS_CORE
@@ -18,7 +18,7 @@ from socless_cli.constants import SOCLESS_CORE
 
 class Cli:
     def __init__(self):
-        self.config = cli_core.ConfigData()
+        self.config = core.ConfigData()
         self.repos: dict = self.config.repos_data
 
     def list_repos(self):

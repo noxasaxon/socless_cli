@@ -4,6 +4,7 @@ from socless_cli.constants import INI_FILE_PATH, INI_ORGS
 from socless_cli.cli.shell_commands.cmd_helpers import build_repo_path
 from socless_cli.cli.shell_commands import node
 from socless_cli.cli.shell_commands import git
+from socless_cli.cli.core import socless_info
 from pprint import pprint
 
 
@@ -56,6 +57,9 @@ class ConfigData:
         self.repos_data = {}
         self.raw_config = {}
         self.refresh_config_data()
+        self.socless_info = {}
+        self.refresh_socless_info()
+        print(self.socless_info)
 
     def refresh_config_data(self):
         config = ConfigParser(allow_no_value=True)
@@ -93,6 +97,15 @@ class ConfigData:
 
         self.repos_data = read_repos()
         self.raw_config = convert_config_to_dict(config)
+
+    def refresh_socless_info(self):
+        print(self.repos_data)
+        all_repos_info = {"integrations": {}}
+        for repo in self.repos_data.values():
+            repo_info = socless_info.generate_integration_info(repo)
+            all_repos_info["integrations"][repo.name] = repo_info
+
+        self.socless_info = all_repos_info
 
     # def get_config_data(self):
     #     return self.config_data
