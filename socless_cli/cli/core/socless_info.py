@@ -32,7 +32,7 @@ def parse_serverless_yaml(repo):
             for output_name, func in yaml_dict["functions"].items():
                 repo_info["functions"][output_name] = {
                     "output_name": output_name,
-                    "description": func["description"],
+                    "description": func["description"] if "description" in func else "",
                     "file_name": func["name"],
                     "file_location": func["package"]["include"][0],
                 }
