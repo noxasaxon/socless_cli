@@ -1,10 +1,9 @@
 from configparser import ConfigParser
-import os
-from socless_cli.constants import INI_FILE_PATH, INI_ORGS
+import os, json
+from socless_cli.constants import INI_FILE_PATH, INI_ORGS, SOCLESS_INFO_FILE_PATH
 from socless_cli.cli.shell_commands.cmd_helpers import build_repo_path
-from socless_cli.cli.shell_commands import node
-from socless_cli.cli.shell_commands import git
-from socless_cli.cli.core import socless_info
+from socless_cli.cli.shell_commands import node, git
+from socless_cli.cli.core import parse
 from pprint import pprint
 
 
@@ -45,9 +44,6 @@ class Repo:
         cmd = git.clone(self, quiet=quiet)
         return cmd
 
-    def deploy(self, deployment_env, quiet=False):
-        cmd = git.deploy(self, deployment_env, quiet=quiet)
-
     def __repr__(self):
         return f"{self.name}:{self.branch} @ {self.url}"
 
@@ -59,7 +55,6 @@ class ConfigData:
         self.refresh_config_data()
         self.socless_info = {}
         self.refresh_socless_info()
-        print(self.socless_info)
 
     def refresh_config_data(self):
         config = ConfigParser(allow_no_value=True)
@@ -99,13 +94,22 @@ class ConfigData:
         self.raw_config = convert_config_to_dict(config)
 
     def refresh_socless_info(self):
-        print(self.repos_data)
         all_repos_info = {"integrations": {}}
         for repo in self.repos_data.values():
-            repo_info = socless_info.generate_integration_info(repo)
+            repo_info = parse.generate_integration_info(repo)
             all_repos_info["integrations"][repo.name] = repo_info
 
         self.socless_info = all_repos_info
+        with open(SOCLESS_INFO_FILE_PATH, "w") as fp:
+            json.dump(self.socless_info, fp, indent=4)
+
+    def list_functions(self):
+        for name, repo_info in self.socless_info["integrations"].items():
+            if "functions" not in repo_info:
+                continue
+            for repo_functions in repo_info.values():
+                for func in repo_functions.values():
+                    print(f"{func['output_name']} - {func['file_location']}")
 
     # def get_config_data(self):
     #     return self.config_data

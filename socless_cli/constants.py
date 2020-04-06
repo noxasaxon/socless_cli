@@ -24,3 +24,7 @@ INI_NAME = "socless.ini"
 INI_FILE_PATH = os.path.join(home, SOCLESS_CLI_DATA_DIR, INI_NAME)
 INI_ORGS = "organizations"
 INI_PLAYBOOKS = "playbooks"
+
+# socless_info.json file for cached function info
+SOCLESS_INFO_NAME = "socless_info.json"
+SOCLESS_INFO_FILE_PATH = os.path.join(home, SOCLESS_CLI_DATA_DIR, SOCLESS_INFO_NAME)

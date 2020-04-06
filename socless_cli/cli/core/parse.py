@@ -1,18 +1,31 @@
-import yaml
+import yaml, ast
 from pprint import pprint
 from socless_cli.constants import INI_FILE_PATH, INI_ORGS
 from socless_cli.cli.shell_commands import git, node
-
-socless_info = {}
 
 
 def generate_integration_info(repo):
     """Parse serverless.yml to find functions & parse their .py files for Args and Docstrings"""
 
     # make sure data is current
-    cmd = git.clone(repo)
+    cmd = git.clone(repo, quiet=True)
     new_info = parse_serverless_yaml(repo)
+    if "functions" in new_info:
+        for func in new_info["functions"].values():
+            parse_results = parse_lambda_file(repo, func["file_location"])
+
     return new_info
+
+
+def parse_lambda_file(repo, file_path):
+    with open(f"{repo.cache_path}/{file_path}/lambda_function.py") as fd:
+        file_contents = fd.read()
+
+    module = ast.parse(file_contents)
+    function_definitions = [
+        node for node in module.body if isinstance(node, ast.FunctionDef)
+    ]
+    print(function_definitions)
 
 
 def parse_serverless_yaml(repo):
@@ -36,7 +49,7 @@ def parse_serverless_yaml(repo):
                     "file_name": func["name"],
                     "file_location": func["package"]["include"][0],
                 }
-    except FileNotFoundError as e:
+    except FileNotFoundError:
         # repo doesnt have a serverless.yml (doesn't deploy i.e. socless_python)
         return repo_info
 

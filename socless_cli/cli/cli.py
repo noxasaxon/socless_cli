@@ -20,6 +20,8 @@ class Cli:
     def __init__(self):
         self.config = core.ConfigData()
         self.repos: dict = self.config.repos_data
+        self.socless_info: dict = self.config.socless_info
+        self.integrations: dict = self.config.socless_info["integrations"]
 
     def list_repos(self):
         pprint(self.repos)
@@ -77,6 +79,10 @@ class Cli:
     def test(self, *args, environment: str = None):
         """Test a deployed lambda or playbook"""
         pass
+
+    def show(self, *args, yes: bool = False):
+        # print(self.integrations)
+        self.config.list_functions()
 
     # private
     def _deploy_repo(self, repo_name, environment):
